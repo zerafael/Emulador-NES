@@ -1,0 +1,80 @@
+
+O que é um emulador? Um emulador é um software capaz de imitar ambientes computacionais.
+Por que utilizar um emulador? Incorporar softwares antigos em hardwares novos.
+Por que o NES? O NES é um console muito popular e com uma grande comunidade de entusiastas.
+
+O cartucho é ondo o jogo é armazenado. Ele contém uma memória ROM, onde o jogo é armazenado.
+Pode conter uma memória RAM, onde é utilizado para salvar o estado do jogo.
+Os jogos mais complexos possuem Memory Mapper. Eram adicionados mais memória ao cartucho, então eram feitos trocas de bancos de memória.
+
+O formato utilizado no emulador é chamado iNes, foi criado por Marat Fayzullin. Ele organizou todo o conteudo do cartucho em varias regiões e usou um cabeçalho de 16 bits para identificar cada parte.
+
+A CPU é uma variação do processador 6502 chamado 2A03, produzida por uma empresa chamado Ricoh, foi escolhido um processador de 8 bits por ser mais barato.
+Memória Ram consiste na Zero Page, Pilha, Ram.
+I/O Register são os registradores de comunicação entre a CPU, PPU e a pAPU.
+PRG-ROM é dividido em banco inferior e superior.
+
+Registradores
+PC armazena o endereço da instrução atual.
+SP armazena o endereço da pilha, onde está a pilha.
+Accumulator é utilizado em operações aritméticas e lógicas.
+Index X e Y é utilizado em alguns modos de endereçamento e em algumas instruções.
+P armazena várias flags.
+	Carry Flag é definida como 1 se a última instrução ocorre um overflow.
+	Zero Flag é definida como 1 se a última instrução resulta em um zero.
+	Desabilitar Interrupção é utilizada para não responder a interrupção IRQ.
+	Decimal Mode não é utilizado pelo NES.
+	Break é definida quando uma instrução Break é executada. Irá executar a interrupção IRQ.
+	Overflow Quando ocorre resultado inesperado em instruções com sinal.
+	Negative é setada quando a operação resulta em um numero negativo.
+
+Modo de endereçamento
+Implied não tem nenhum operando. como a instruçao NOP.
+Immediate é utilizado quando o operando é dado diretamente depois da instrução .LDA $07
+Accumulator Utiliza como operando o conteudo do registrador accumulator. ASL (Shift 1 esquerda)
+Relative Utilizado por instruções de desvio condicional. Se a condição for verdadeira é somado o valor do operando ao PC, caso contrario PC é incrementado. BEQ (= 0) $04.
+
+Instruções:
+56 instruções diferentes, mas com modos de endereçamento temos 151 instruções ao todo. Pode utilizar no maximo 3 bytes.
+ADC - Adiciona memória com accumulator
+AND ou OR - memória com accumulator
+INX - Increment Index X by One
+PHA - Push Accumulator
+STA - Store Accumulator na memória
+TSX - Transfere o Stack Pointer para o Index X.
+LSR - Shift Right 1 bit
+
+IRQ é gerado por memory mappers, para alteração de banco de memória.
+NMI é gerado pela PPU para marcar o começo do periodo de VBlank.
+Reset gerado quando inializa ou reseta o nintendo.
+
+Divido em paletas, tabela de nomes e atributos, e tabela de padrões.
+
+2000 e 2001 Registradores de E/S contém varias flags como a tabela de nomes utilizada, tabela de padrões utilizada para o background e para os sprites, tamanho dos sprites, cores utilizada, etc.
+2002 registrador de status utilizado para conversar com a cpu, indica quando ocorre vblank, quando tem mais de 8 sprites no mesmo scanline, etc.
+2003 seta o endereço do SPR-RAM e 2004 o byte que será escrito.
+2005 faz duas escritas, uma é o pixel X, outra é o Y.
+4014 passa um valor, multiplica esse valor por $100. Esse valor é da memória da CPU.
+
+Paleta de Cores
+Tem 64 cores, as cores depende da televisão.
+
+Tabela de Padrões
+O NES tem duas tabelas de padrões, uma é utilizada para o background, a outra para os Sprites. Armazenam os tiles de 8x8 pixels que serão desenhados na tela, utilizados para formar a tabela de nomes. A primeira tabela é o bit menos significativo. É feito a concatenação das duas tabelas. São os dois bits menos significativos para a escolha das cores.
+
+Tabela de Nomes é um conjunto de tiles, ou seja, um conjunto de padrões da tabela de padrões, que no final forma um quadro.
+É do tamanho 240X256 ou 30X32.
+Um bloco é 2x2 tiles.
+
+Cada tabela de atributos é ligada a uma tabela de nomes e possui 64 bytes. Cada byte corresponde a uma região de 2x2 blocos. Cada byte é dividido em 2 bits.
+É utilizada para controlar qual paleta de cores cada tile irá utilizar. Junto com o valor obtido na tabela de padrões obtem a cor exata a ser utilizada em cada pixel.
+
+Scrolling
+Scrolling é um efeito de que a tela do jogo está em movimento. Como o andar dos personagens. Pode ser utilizado scrolling na vertical ou na horizontal, ou até para ambos os sentidos. Com o scrolling, será exibido na tela mais de uma tabela de nomes.
+
+Sprites
+É qualquer coisa que pode se mover na tela. Cada Sprite é composto por 4 bytes, personagens e objetos são formados por vários sprites. Em um scanline pode ter até 8 sprites.
+Sprite 0 Hit é utilizada para verificar colisão com o background, para split screen. ou Verificar o término do V-Blank.
+
+Controle
+Faz 8 leituras na I/O register. Cada leitura é uma verificação para um botao diferente, A, B, Select, cima, baixo, esquerda, direita.

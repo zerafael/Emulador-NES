@@ -1,0 +1,37 @@
+Conteúdo:
+
+    Na pasta Codigo encontra-se todo o código do emulador.
+    Na pasta ROMs encontram-se 4 jogos e um ROM de teste de instruções, chamado nestest.nes. Há também o arquivo de log dos testes da instruções fornecido pela
+    comunidade mencionado no artigo.
+
+Requisitos:
+
+    Para executar o emulador é preciso ter o Python 2.7.11 e a biblioteca PyGame 1.9.1 instalados.
+
+    Python - https://www.python.org/downloads/release/python-2711/
+    PyGame - http://www.pygame.org/download.shtml
+
+Execução:
+    Para executar o emulador entre com o comando abaixo:
+
+    cd Codigo
+    python console.py ../ROMs/ROM
+
+    ROM - O jogo que deseja ser emulado
+
+    Exemplo: python console.py ../ROMs/SuperMarioBros.\(Japan\,USA\).nes
+
+Mapeamento do Controle:
+
+    Controle    |    Teclado
+    ____________|_____________
+        A       |       a
+        B       |       s
+      Select    |    Espaço
+      Start     |     Enter
+      Cima      | Seta para cima
+      Baixo     | Seta para baixo
+      Esquera   | Seta para esquerda
+      Direita   | Seta para direita
+
+      A tecla ESC encerra o emulador.
